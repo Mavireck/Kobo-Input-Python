@@ -8,7 +8,10 @@ To use this librairy easily, just use:
 # t = KIP.inputObject(touchPath, 1080, 1440)
 Then, you can use a while True loop:
 # while True:
-#     (x, y, err) = t.getInput()
+#     try:
+#         (x, y, err) = t.getInput()
+#     except:
+#          print("error decoding data")
 
 I can think of 2 ways to implement touch areas:
 1/  Keep arrays of length 4 containing x1,y1,x2,y2, the coordinates of the area. 
@@ -17,6 +20,10 @@ I can think of 2 ways to implement touch areas:
 2/  Define a new class "touchArea([x1,y1,x2,y2],listofVar,functionOnClick)".
     Then you can loop through all instances of the class to find the area you clicked on. 
     You may need to consider looping through a list of global variables 'listOfVar' that must all be True to execute the functionOnClick function.
+
+You will probably need some sort of debounce function.
+I personnally used a variable containing the time of the last event, and another one containing the coordinates of the last touch
+Then, if the user clicks twice in the same area within a short amout of time, ignore the input.
 
 """
 
