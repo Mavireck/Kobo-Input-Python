@@ -170,7 +170,7 @@ class inputObject:
 		#print("Results returned")
 		return (rx, ry, None)
 
-	def debounceAllow(self):
+	def debounceAllow(self,x,y):
 		"""
 		Returns False if the two last clicks were too close in time and in the same area.
 		Returns True if the click is completely valid and not a reminiscence of a previous click.
