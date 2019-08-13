@@ -22,7 +22,7 @@ I can think of 2 ways to implement touch areas:
 
 import os,sys
 import struct
-import time
+from time import time
 
 evAbs = 3
 evKey = 1
@@ -46,16 +46,19 @@ FORMAT = 'llHHI'
 EVENT_SIZE = struct.calcsize(FORMAT)
 
 
-
 class inputObject:
 	"""
 	Input object 
 	"""
-	def __init__(self,inputPath,vwidth,vheight):
+	def __init__(self,inputPath,vwidth,vheight,debounceTime=0.2,touchAreaSize=7):
 		self.inputPath = inputPath
 		self.viewWidth = vwidth
 		self.viewHeight = vheight
 		self.devFile = open(inputPath, "rb")
+		self.lastTouchTime = 0
+		self.lastTouchArea = [-3,-3,-2,-2]
+		self.touchDebounceTime = debounceTime
+		self.lastTouchAreaSize = touchAreaSize
 
 	def close(self):
 		""" Closes the input event file """
@@ -88,7 +91,6 @@ class inputObject:
 				if EvType == evSyn and EvCode == synReport:
 					# We have a complete event packet
 					return evPacket
-
 
 	def getInput(self):
 		"""
@@ -167,3 +169,27 @@ class inputObject:
 		rx = self.viewWidth - y + 1
 		#print("Results returned")
 		return (rx, ry, None)
+
+	def debounceAllow(self):
+		"""
+		Returns False if the two last clicks were too close in time and in the same area.
+		Returns True if the click is completely valid and not a reminiscence of a previous click.
+		"""
+		if coordsInArea(x,y,self.lastTouchArea):
+			if timeDelta(self.lastTouchTime,time())<touchDebounceTime:
+				return False
+			else:
+				self.lastTouchArea=[x-self.lastTouchAreaSize,y-self.lastTouchAreaSize,x+self.lastTouchAreaSize,y+self.lastTouchAreaSize]
+				self.lastTouchTime=time()
+				return True
+		else:
+			self.lastTouchTime=time()
+			self.lastTouchArea=[x-self.lastTouchAreaSize,y-self.lastTouchAreaSize,x+self.lastTouchAreaSize,y+self.lastTouchAreaSize]
+			return True
+
+
+def coordsInArea(x,y,area):
+	if x>=area[0] and x<area[2] and y>=area[1] and y<area[3]:
+		return True
+	else:
+		return False
