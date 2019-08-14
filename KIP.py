@@ -176,7 +176,7 @@ class inputObject:
 		Returns True if the click is completely valid and not a reminiscence of a previous click.
 		"""
 		if coordsInArea(x,y,self.lastTouchArea):
-			if timeDelta(self.lastTouchTime,time())<touchDebounceTime:
+			if time() - self.lastTouchTime < self.touchDebounceTime:
 				return False
 			else:
 				self.lastTouchArea=[x-self.lastTouchAreaSize,y-self.lastTouchAreaSize,x+self.lastTouchAreaSize,y+self.lastTouchAreaSize]
