@@ -11,11 +11,11 @@ Then, you can use a while True loop:
 #     (x, y, err) = t.getInput()
 
 I can think of 2 ways to implement touch areas:
-1/  Keep arrays of length 4 containing x1,y1,x2,y2, the coordinates of the area. 
+1/  Keep arrays of length 4 containing x1,y1,x2,y2, the coordinates of the area.
 	Then, for each click, loop through the areas to find the one you clicked on.
 	You therefore hardcode which condition apply and which function to execute on click
 2/  Define a new class "touchArea([x1,y1,x2,y2],listofVar,functionOnClick)".
-	Then you can loop through all instances of the class to find the area you clicked on. 
+	Then you can loop through all instances of the class to find the area you clicked on.
 	You may need to consider looping through a list of global variables 'listOfVar' that must all be True to execute the functionOnClick function.
 
 """
@@ -48,7 +48,7 @@ EVENT_SIZE = struct.calcsize(FORMAT)
 
 class inputObject:
 	"""
-	Input object 
+	Input object
 	"""
 	def __init__(self,inputPath,vwidth,vheight,debounceTime=0.2,touchAreaSize=7):
 		self.inputPath = inputPath
@@ -153,7 +153,7 @@ class inputObject:
 			# To ensure we never get caught in an infinite loop
 			if decodeEvAttempts < 5 :
 				decodeEvAttempts += 1
-			else : 
+			else :
 				x, y = -1, -1
 				err = "unable to decode complete touch packet"
 				print(err)
