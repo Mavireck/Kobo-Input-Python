@@ -23,6 +23,8 @@ I can think of 2 ways to implement touch areas:
 import os,sys
 import struct
 from time import time
+import grabInput as grabber
+from fcntl import ioctl
 
 evAbs = 3
 evKey = 1
@@ -50,7 +52,7 @@ class inputObject:
 	"""
 	Input object
 	"""
-	def __init__(self,inputPath,vwidth,vheight,debounceTime=0.2,touchAreaSize=7):
+	def __init__(self,inputPath,vwidth,vheight,grabInput=False,debounceTime=0.2,touchAreaSize=7):
 		self.inputPath = inputPath
 		self.viewWidth = vwidth
 		self.viewHeight = vheight
@@ -59,10 +61,15 @@ class inputObject:
 		self.lastTouchArea = [-3,-3,-2,-2]
 		self.touchDebounceTime = debounceTime
 		self.lastTouchAreaSize = touchAreaSize
+		self.isInputGrabbed = grabInput
+		if grabInput:
+			ioctl(self.devFile, grabber.EVIOCGRAB(1), True)
 
 	def close(self):
 		""" Closes the input event file """
 		self.devFile.close()
+		if self.isInputGrabbed:
+			ioctl(self.devFile, grabber.EVIOCGRAB(1), False)
 		return True
 
 	def getEvtPacket(self):
