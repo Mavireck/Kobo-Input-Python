@@ -67,9 +67,9 @@ class inputObject:
 
 	def close(self):
 		""" Closes the input event file """
-		self.devFile.close()
 		if self.isInputGrabbed:
 			ioctl(self.devFile, grabber.EVIOCGRAB(1), False)
+		self.devFile.close()
 		return True
 
 	def getEvtPacket(self):
