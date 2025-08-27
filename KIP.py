@@ -124,7 +124,7 @@ class inputObject:
 			#Now to decode :
 			for e in evPacket:
 				if e[2] == evKey:
-					if e[3] == bntTouch:
+					if e[3] == btnTouch:
 						if e[4] == 1:
 							touchPressed = True
 						else :
